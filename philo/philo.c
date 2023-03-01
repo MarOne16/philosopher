@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:01:04 by mqaos             #+#    #+#             */
-/*   Updated: 2023/02/28 19:16:35 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/01 17:22:13 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,56 +17,97 @@
 pthread_mutex_t pthread;
 pthread_mutex_t print;
 
+size_t    get_time(void)
+{
+    struct timeval    tp;
+    size_t        milliseconds;
+
+    gettimeofday(&tp, NULL);
+    milliseconds = tp.tv_sec * 1000;
+    milliseconds += tp.tv_usec / 1000;
+    return (milliseconds);
+}
+
+void    ft_sleepms(size_t ms)
+{
+    size_t    curr;
+    size_t    end;
+
+    curr = get_time();
+    end = curr + ms;
+    while (get_time() < end)
+        usleep(100);
+}
+
+void *thread_function(void *arg)
+{
+    printf("Hello from a new thread!\n");
+    return NULL;
+}
+
 void ft_eat(t_th *t)
 {
     int i =0;
-    struct timeval tp;
-    struct timeval tp2;
     pthread_mutex_lock(&print);
-    gettimeofday(&tp,NULL);
+    size_t t1 = get_time();
     printf("philo [%ld] is taking a forks\n",t->id);
-    if (t->next && t->previous)
+    t->timedie = 0;
+    if (t->next || t->previous)
     {
-        t->status = 0;
-        t->previous->status = 1;
-        t->next->status = 1;
+        if (t->next)
+        {
+            t->status = 0;
+            t->next->status = 1;
+        }
+        if (t->previous)
+        {
+            t->status = 0;
+            t->previous->status = 1;
+        }
     }
-    else
-        t->status = 0;
-    usleep(t->time);
-    gettimeofday(&tp2,NULL);
-    t->timedie += (tp2.tv_usec - tp.tv_usec);
-    // write(1, "philo out eat mode...\n", 23);
-    printf("[%ldms] philo [%ld] out eat mode...\n",t->timedie / 1000,t->id);
+    ft_sleepms(t->time);
+    size_t t2 = get_time();
+    t->timedie += t2 - t1;
+    if (t->timedie > t->maxtime)
+    {
+        printf("x_x philo [%ld] die",t->id);
+        exit(0);
+    }
+
     pthread_mutex_unlock(&print);
 }
 void ft_sleep(t_th *t)
 {
     int i =0;
-    struct timeval tp;
-    struct timeval tp2;
     pthread_mutex_lock(&print);
-    gettimeofday(&tp,NULL);
+    size_t t1 = get_time();
     printf("philo [%ld] in sleep mode...\n",t->id);
-    usleep(t->time);
-    gettimeofday(&tp2,NULL);
-    t->timedie -= (tp2.tv_usec - tp.tv_usec);
-    printf("[%ldms] philo [%ld] out sleep mode...\n",t->timedie / 1000,t->id);
+    size_t t2 = get_time();
+    t->timedie += t2 - t1;
+    if (t->timedie > t->maxtime)
+    {
+        printf("x_x philo [%ld] die",t->id);
+        exit(0);
+    }
+    printf("[%ldms] philo [%ld] out sleep mode...\n",t->timedie,t->id);
     pthread_mutex_unlock(&print);
 }
 void ft_think(t_th *t)
 {
     pthread_mutex_lock(&print);
     int i =0;
-    struct timeval tp;
-    struct timeval tp2;
-    gettimeofday(&tp,NULL);
+    size_t t1 = get_time();;
     printf("philo [%ld] in think mode...\n",t->id);
     pthread_mutex_unlock(&print);
-    usleep(t->time);
-    gettimeofday(&tp2,NULL);
-    t->timedie -= (tp2.tv_usec - tp.tv_usec);
-    printf("[%ldms] philo [%ld] out think mode...\n",t->timedie  / 1000,t->id);
+    ft_sleepms(t->time);
+    size_t t2 = get_time();
+    t->timedie += t2 - t1;
+    if (t->timedie > t->maxtime)
+    {
+        printf("x_x philo [%ld] die",t->id);
+        exit(0);
+    }
+    printf("[%ldms] philo [%ld] out think mode...\n",t->timedie,t->id);
     pthread_mutex_unlock(&print);
 }
 
@@ -82,30 +123,13 @@ void* handel(void *th)
             ft_sleep(t);
             ft_think(t);
         }
-        pthread_mutex_lock(&print);
-        if (t->timedie <= 0)
-        {
-            printf("philo [%ld] die",t->id);
-            exit(0);
-        }
-        pthread_mutex_unlock(&print);
-        // pthread_mutex_unlock(&pthread);
-        // pthread_mutex_lock(&pthread);
-        // pthread_mutex_unlock(&pthread);
-        // pthread_mutex_lock(&pthread);
-        // pthread_mutex_unlock(&pthread);
-        // pthread_mutex_unlock(&pthread);
     }
-    // printf("thread number %d\n",t->id);
-    // free(th);
     return NULL;
 }
 
-
-
 int main(int argc, char *argv[])
 {
-    if (argc == 4)
+    if (argc == 5)
     {
         pthread_mutex_init(&pthread, NULL);
         pthread_mutex_init(&print, NULL);
@@ -117,8 +141,8 @@ int main(int argc, char *argv[])
         int x;
         while (++i < total)
         {
-            x = (i % 2);
-            ft_lstadd_back(&t,lstnew(th[i],i,x,ft_atoi(argv[2]),ft_atoi(argv[3])));
+            x = ((i + 1) % 2);
+            ft_lstadd_back(&t,lstnew(th[i],i,x,ft_atoi(argv[2]),ft_atoi(argv[3]),ft_atoi(argv[4])));
         }
         i = 0;
         while (t)

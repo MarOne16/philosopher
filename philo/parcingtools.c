@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:13:02 by mqaos             #+#    #+#             */
-/*   Updated: 2023/02/27 19:59:38 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/01 15:43:59 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ long	ft_atoi(char *str)
 	return (z * x);
 }
 
-t_th	*lstnew(pthread_t th,long id,long status, long time,long timedie)
+t_th	*lstnew(pthread_t th,long id,long status, long time,long timedie,size_t maxtime)
 {
 	t_th	*node;
 	node = malloc(sizeof(t_th));
@@ -49,6 +49,7 @@ t_th	*lstnew(pthread_t th,long id,long status, long time,long timedie)
 	node->status = status;
 	node->time = time;
 	node->timedie = timedie;
+	node->maxtime = maxtime;
 	node->next = NULL;
 	node->previous = NULL;
 	return(node);
