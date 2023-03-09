@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:10:10 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/09 16:11:30 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/09 19:24:38 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_th
 	int                 id;
 	int                 kla;
 	pthread_mutex_t		*print;
+	pthread_mutex_t		*die;
 	pthread_mutex_t		*left_f;
 	pthread_mutex_t		*right_f;
 	size_t              timedie;
@@ -40,7 +41,8 @@ typedef struct s_th
 struct philo_t
 {
 	t_th            *list;
-	pthread_mutex_t		print;
+	pthread_mutex_t		*print;
+	pthread_mutex_t		*die;
 	pthread_mutex_t *pause;
 	
 }typedef philo_t;
@@ -54,5 +56,6 @@ void    *handel(void *th);
 size_t	ft_atoi(char *str);
 void	putnbr(size_t nb);
 void	printp(t_th *philo,char *str);
+void	distroy(philo_t *philo);
 
 #endif // PHILO_H

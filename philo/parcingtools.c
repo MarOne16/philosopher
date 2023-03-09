@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:13:02 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/09 16:42:45 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/09 20:17:28 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,6 @@ size_t	ft_atoi(char *str)
 	return (z * x);
 }
 
-void	putnbr(size_t nb)
-{
-	if (nb > 9)
-		putnbr(nb / 10);
-	write(1,&"0123456789"[nb % 10],1);	
-}
-
 void	printp(t_th *philo,char *str)
 {
 	pthread_mutex_lock(philo->print);
@@ -62,5 +55,5 @@ void	distroy(philo_t *philo)
 		pthread_mutex_destroy(philo->list[x].left_f);
 		free(&philo->list[++x]);
 	}
-	pthread_mutex_destroy(&philo->print);
+	pthread_mutex_destroy(philo->print);
 }
