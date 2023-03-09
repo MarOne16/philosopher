@@ -6,17 +6,17 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:13:02 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/01 15:43:59 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/09 16:42:45 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"philo.h"
 
-long	ft_atoi(char *str)
+size_t	ft_atoi(char *str)
 {
-	long	x;
-	long	z;
-	long	i;
+	size_t	x;
+	size_t	z;
+	size_t	i;
 
 	x = 1;
 	z = 0;
@@ -38,47 +38,29 @@ long	ft_atoi(char *str)
 	return (z * x);
 }
 
-t_th	*lstnew(pthread_t th,long id,long status, long time,long timedie,size_t maxtime)
+void	putnbr(size_t nb)
 {
-	t_th	*node;
-	node = malloc(sizeof(t_th));
-	if (!node)
-		return(0);
-	node->th = th;
-	node->id = id;
-	node->status = status;
-	node->time = time;
-	node->timedie = timedie;
-	node->maxtime = maxtime;
-	node->next = NULL;
-	node->previous = NULL;
-	return(node);
+	if (nb > 9)
+		putnbr(nb / 10);
+	write(1,&"0123456789"[nb % 10],1);	
 }
 
-t_th	*ft_lstlast(t_th *lst)
+void	printp(t_th *philo,char *str)
 {
-	t_th	*l;
-
-	if (!lst)
-		return (0x0);
-	l = lst;
-	while (l -> next != 0)
-		l = l -> next;
-	return (l);
+	pthread_mutex_lock(philo->print);
+	printf("%zu ms philo %d%s",philo->current_time,philo->id,str);
+	pthread_mutex_unlock(philo->print);	
 }
 
-void	ft_lstadd_back(t_th **lst, t_th *new)
+void	distroy(philo_t *philo)
 {
-	t_th	*lst2;
+	int x;
 
-	if (lst == 0)
-		return ;
-	if (*lst == 0)
-		*lst = new;
-	else
+	x = -1;
+	while (&philo->list[++x])
 	{
-		lst2 = ft_lstlast(*lst);
-		lst2 -> next = new;
-		new -> previous = lst2;
+		pthread_mutex_destroy(philo->list[x].left_f);
+		free(&philo->list[++x]);
 	}
+	pthread_mutex_destroy(&philo->print);
 }
