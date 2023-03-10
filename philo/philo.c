@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:01:04 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/10 20:43:53 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/10 23:01:19 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,10 @@ void	ft_eat(t_philo *philo)
 	t3 = get_time();
 	philo->kla -= 1;
 	philo->timedie = philo->maxtime;
-	printp(philo, " is eating\n");
+	printp(philo, " is eating\n", 3);
 	ft_sleepms(philo->timeineat, philo);
 	t4 = get_time();
 	philo->current_time += t4 - t3;
-
 }
 
 void	ft_sleep(t_philo *philo)
@@ -62,7 +61,7 @@ void	ft_sleep(t_philo *philo)
 	size_t	t3;
 
 	t3 = get_time();
-	printp(philo, " is sleeping\n");
+	printp(philo, " is sleeping\n", 1);
 	ft_sleepms(philo->timesleep, philo);
 	t4 = get_time();
 	philo->current_time += t4 - t3;
@@ -75,7 +74,7 @@ int	main(int argc, char *argv[])
 	t_philo			*philo;
 	pthread_mutex_t	print;
 
-	if ((argc == 5 || argc == 6) && checkarg(argv) == 0)
+	if ((argc == 5 || argc == 6) && !checkarg(argv))
 	{
 		x = -1;
 		philo = malloc(sizeof(t_philo));

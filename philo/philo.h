@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:10:10 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/10 20:30:53 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/10 23:01:04 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@
 # include <stdio.h>
 # include <errno.h>
 # include <sys/time.h>
+
+# define AC_BLACK "\x1b[30m"
+# define AC_RED "\x1b[31m"
+# define AC_GREEN "\x1b[32m"
+# define AC_YELLOW "\x1b[33m"
+# define AC_BLUE "\x1b[34m"
+# define AC_MAGENTA "\x1b[35m"
+# define AC_CYAN "\x1b[36m"
+# define AC_WHITE "\x1b[37m"
+# define AC_NORMAL "\x1b[m"
 
 typedef struct s_philo
 {
@@ -44,11 +54,10 @@ void		feedthread(t_philo *philo, char **argv,
 int			checkkla(t_philo *philo, int i);
 size_t		ft_atoi(char *str);
 void		putnbr(size_t nb);
-void		printp(t_philo *philo, char *str);
+void		printp(t_philo *philo, char *str, int x);
 void		ft_eat(t_philo *philo);
 void		ft_sleep(t_philo *philo);
 void		ft_sleepms(size_t ms, t_philo *philo);
 size_t		get_time(void);
 
 #endif /* PHILO_H */
-

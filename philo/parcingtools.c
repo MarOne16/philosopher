@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:13:02 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/10 20:55:34 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/10 23:00:22 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,20 @@ size_t	ft_atoi(char *str)
 	return (z * x);
 }
 
-void	printp(t_philo *philo, char *str)
+void	printp(t_philo *philo, char *str, int x)
 {
 	pthread_mutex_lock(philo->print);
-	printf("%zu ms philo %d%s", philo->current_time, philo->id,str);
+	if (x == 1)
+		printf(AC_BLUE"%zu ms philo %d%s", philo->current_time, philo->id, str);
+	else if (x == 2)
+		printf(AC_YELLOW"%zu ms philo %d%s",
+			philo->current_time, philo->id, str);
+	else if (x == 3)
+		printf(AC_WHITE"%zu ms philo %d%s",
+			philo->current_time, philo->id, str);
+	else
+		printf(AC_MAGENTA"%zu ms philo %d%s",
+			philo->current_time, philo->id, str);
 	pthread_mutex_unlock(philo->print);
 }
 

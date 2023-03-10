@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 19:46:22 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/10 20:05:42 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/10 22:56:08 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ void	*routin(void *arg)
 		philo->timedie -= t4 - t3;
 		t2 = get_time();
 		philo->current_time += t2 - t1;
-		printp(philo, " taking a forks\n");
+		printp(philo, " taking a forks\n", 4);
 		ft_eat(philo);
 		pthread_mutex_unlock(philo->right_f);
 		pthread_mutex_unlock(&philo->left_f);
 		ft_sleep(philo);
-		printp(philo, " is thinking\n");
+		printp(philo, " is thinking\n", 2);
 	}
 	return (NULL);
 }
@@ -56,14 +56,14 @@ void	runthread(t_philo *philo, int i)
 			if ((philo[x].timedie <= 0) || (i <= 1))
 			{
 				pthread_mutex_lock(philo->print);
-				printf("%zu ms philo %d die\n",
+				printf(AC_RED "%zu ms philo %d die\n",
 					philo[x].current_time, philo[x].id);
 				return ;
 			}
 			else if (!checkkla(philo, i))
 			{
 				pthread_mutex_lock(philo->print);
-				printf("all philo eats\n");
+				printf(AC_GREEN"all philo eats\n");
 				return ;
 			}
 		}

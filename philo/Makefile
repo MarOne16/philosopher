@@ -6,11 +6,8 @@ NAME		=	philo
 CC			=	cc
 FLAGS		=	-Wall -Wextra -Werror -pthread
 RM			=	rm -rf
-HEADER_F	=	philo.h
-HEADER_DIR	=	headers/
-HEADER		=	$(HEADER_DIR) $(HEADER_F)
-SOURCE_F	=	parcingtools.c philo.c checkphilo.c	
-SOURCE		=	$(SOURCE_F)
+HEADER		=	philo.h
+SOURCE		=	parcingtools.c philo.c checkphilo.c	
 OBJS		=	$(SOURCE:.c=.o)
 %.o: %.c
 				@${CC} ${FLAGS} -c $< -o $@
