@@ -6,56 +6,49 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:10:10 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/09 19:24:38 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/10 20:30:53 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if !defined(PHILO_H)
-#define PHILO_H
-#include    <string.h>
-#include    <unistd.h>
-#include    <pthread.h>
-#include    <stdlib.h>
-#include    <stdio.h>
-#include    <errno.h>
-#include    <sys/time.h>
+#ifndef PHILO_H
+# define PHILO_H
 
-typedef struct s_th
+# include <string.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <errno.h>
+# include <sys/time.h>
+
+typedef struct s_philo
 {
-	pthread_t           th;
-	int                 id;
-	int                 kla;
+	pthread_t			th;
+	int					id;
+	size_t				kla;
 	pthread_mutex_t		*print;
-	pthread_mutex_t		*die;
-	pthread_mutex_t		*left_f;
+	pthread_mutex_t		left_f;
 	pthread_mutex_t		*right_f;
-	size_t              timedie;
+	size_t				timedie;
 	size_t				current_time;
 	size_t				maxtime;
 	size_t				timesleep;
 	size_t				timeineat;
-	int					off;
-	
-}t_th;
+}						t_philo;
 
-struct philo_t
-{
-	t_th            *list;
-	pthread_mutex_t		*print;
-	pthread_mutex_t		*die;
-	pthread_mutex_t *pause;
-	
-}typedef philo_t;
+void		*routin(void *arg);
+int			checkarg(char **argv);
+void		runthread(t_philo *philo, int i);
+void		feedthread(t_philo *philo, char **argv,
+				pthread_mutex_t *print, size_t kla);
+int			checkkla(t_philo *philo, int i);
+size_t		ft_atoi(char *str);
+void		putnbr(size_t nb);
+void		printp(t_philo *philo, char *str);
+void		ft_eat(t_philo *philo);
+void		ft_sleep(t_philo *philo);
+void		ft_sleepms(size_t ms, t_philo *philo);
+size_t		get_time(void);
 
-t_th	*lstnew(pthread_t th,int id,int status,size_t timedie);
-void	ft_lstadd_front(t_th **lst, t_th *new);
-t_th	*ft_lstlast(t_th *lst);
-void	ft_lstadd_back(t_th **lst, t_th *new);
-void	ft_putstr_fd(char *s, int fd);
-void    *handel(void *th);
-size_t	ft_atoi(char *str);
-void	putnbr(size_t nb);
-void	printp(t_th *philo,char *str);
-void	distroy(philo_t *philo);
+#endif /* PHILO_H */
 
-#endif // PHILO_H

@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:13:02 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/09 20:17:28 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/10 20:55:34 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,29 @@ size_t	ft_atoi(char *str)
 	return (z * x);
 }
 
-void	printp(t_th *philo,char *str)
+void	printp(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(philo->print);
-	printf("%zu ms philo %d%s",philo->current_time,philo->id,str);
-	pthread_mutex_unlock(philo->print);	
+	printf("%zu ms philo %d%s", philo->current_time, philo->id,str);
+	pthread_mutex_unlock(philo->print);
 }
 
-void	distroy(philo_t *philo)
+int	checkarg(char **argv)
 {
-	int x;
+	int	i;
+	int	x;
 
-	x = -1;
-	while (&philo->list[++x])
+	i = 0;
+	while (argv[++i])
 	{
-		pthread_mutex_destroy(philo->list[x].left_f);
-		free(&philo->list[++x]);
+		x = 0;
+		while (argv[i][x])
+		{
+			if (argv[i][x] >= '0' && argv[i][x] <= '9')
+				x++;
+			else
+				return (1);
+		}
 	}
-	pthread_mutex_destroy(philo->print);
+	return (0);
 }
