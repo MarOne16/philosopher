@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 19:46:22 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 16:18:03 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 22:55:51 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*routin(void *arg)
 	size_t	t4;
 
 	philo = (t_philo *) arg;
-	while (1)
+	while (1 && usleep(100) != -10)
 	{
 		t3 = gettime_ms();
 		t1 = gettime_ms();
@@ -47,7 +47,7 @@ void	runthread(t_philo *philo, int i)
 	x = -1;
 	while (++x < i)
 		pthread_create(&philo[x].th, NULL, &routin, &philo[x]);
-	while (1)
+	while (1 && usleep(50) != -10)
 	{
 		x = -1;
 		while (++x < i)
