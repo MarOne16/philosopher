@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 19:46:22 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 16:11:35 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 16:18:03 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	runthread(t_philo *philo, int i)
 			if ((philo[x].timedie >= philo->maxtime) || (i <= 1))
 			{
 				pthread_mutex_lock(philo->print);
-				printf(AC_RED "%zu ms philo %d die\n",
+				printf(AC_RED "%zu ms philo %d died\n",
 					philo[x].current_time, philo[x].id);
 				return ;
 			}

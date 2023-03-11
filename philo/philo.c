@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:01:04 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 16:13:38 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 16:35:28 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,6 @@ int	main(int argc, char *argv[])
 		destroy(philo, i);
 	}
 	else
-		printf("Error\n");
+		printf(AC_BLACK"Error\n");
 	return (0);
 }
