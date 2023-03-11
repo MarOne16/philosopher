@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 19:46:22 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 15:42:13 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 16:11:35 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	runthread(t_philo *philo, int i)
 			else if (!checkkla(philo, i))
 			{
 				pthread_mutex_lock(philo->print);
-				printf(AC_GREEN"all philo eats\n");
+				printf(AC_GREEN"All philosophers ate their meals\n");
 				return ;
 			}
 		}
@@ -116,5 +116,4 @@ void	destroy(t_philo *philo, int i)
 {
 	while (--i)
 		pthread_mutex_destroy(&philo[i].left_f);
-	free(philo);
 }

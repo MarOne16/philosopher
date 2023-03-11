@@ -6,19 +6,17 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:10:10 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 15:42:30 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 16:12:23 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <string.h>
 # include <unistd.h>
 # include <pthread.h>
 # include <stdlib.h>
 # include <stdio.h>
-# include <math.h>
 # include <sys/time.h>
 
 # define AC_BLACK "\x1b[30m"
