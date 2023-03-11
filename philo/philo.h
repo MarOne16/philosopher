@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:10:10 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/10 23:01:04 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 14:51:42 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <errno.h>
+# include <math.h>
 # include <sys/time.h>
 
 # define AC_BLACK "\x1b[30m"
@@ -58,6 +59,6 @@ void		printp(t_philo *philo, char *str, int x);
 void		ft_eat(t_philo *philo);
 void		ft_sleep(t_philo *philo);
 void		ft_sleepms(size_t ms, t_philo *philo);
-size_t		get_time(void);
+size_t		gettime_ms(void);
 
 #endif /* PHILO_H */

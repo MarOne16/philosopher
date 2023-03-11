@@ -6,21 +6,21 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:01:04 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/10 23:01:19 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 14:56:17 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-size_t	get_time(void)
+size_t	gettime_ms(void)
 {
 	struct timeval		tp;
-	size_t				milliseconds;
+	size_t				ms;
 
 	gettimeofday(&tp, NULL);
-	milliseconds = tp.tv_sec * 1000;
-	milliseconds += tp.tv_usec / 1000;
-	return (milliseconds);
+	ms = tp.tv_sec * 1000;
+	ms += tp.tv_usec / 1000;
+	return (ms);
 }
 
 void	ft_sleepms(size_t ms, t_philo *philo)
@@ -30,14 +30,14 @@ void	ft_sleepms(size_t ms, t_philo *philo)
 	size_t	t1;
 	size_t	t2;
 
-	curr = get_time();
+	curr = gettime_ms();
 	end = curr + ms;
-	while (get_time() < end)
+	while (gettime_ms() < end)
 	{
-		t1 = get_time();
-		usleep(10);
-		t2 = get_time();
-		philo->timedie -= t2 - t1;
+		t1 = gettime_ms();
+		usleep(100);
+		t2 = gettime_ms();
+		philo->timedie += ((t2 - t1));
 	}
 }
 
@@ -46,12 +46,12 @@ void	ft_eat(t_philo *philo)
 	size_t	t4;
 	size_t	t3;
 
-	t3 = get_time();
+	t3 = gettime_ms();
 	philo->kla -= 1;
-	philo->timedie = philo->maxtime;
+	philo->timedie = 0;
 	printp(philo, " is eating\n", 3);
 	ft_sleepms(philo->timeineat, philo);
-	t4 = get_time();
+	t4 = gettime_ms();
 	philo->current_time += t4 - t3;
 }
 
@@ -60,11 +60,12 @@ void	ft_sleep(t_philo *philo)
 	size_t	t4;
 	size_t	t3;
 
-	t3 = get_time();
+	t3 = gettime_ms();
 	printp(philo, " is sleeping\n", 1);
 	ft_sleepms(philo->timesleep, philo);
-	t4 = get_time();
+	t4 = gettime_ms();
 	philo->current_time += t4 - t3;
+	printp(philo, " is thinking\n", 2);
 }
 
 int	main(int argc, char *argv[])

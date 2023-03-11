@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 19:46:22 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/10 22:56:08 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 15:14:35 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,19 @@ void	*routin(void *arg)
 	philo = (t_philo *) arg;
 	while (1)
 	{
-		t3 = get_time();
-		t1 = get_time();
+		t3 = gettime_ms();
+		t1 = gettime_ms();
 		pthread_mutex_lock(&philo->left_f);
 		pthread_mutex_lock(philo->right_f);
-		t4 = get_time();
-		philo->timedie -= t4 - t3;
-		t2 = get_time();
+		t2 = gettime_ms();
+		t4 = gettime_ms();
+		philo->timedie += ((t4 - t3));
 		philo->current_time += t2 - t1;
 		printp(philo, " taking a forks\n", 4);
 		ft_eat(philo);
 		pthread_mutex_unlock(philo->right_f);
 		pthread_mutex_unlock(&philo->left_f);
 		ft_sleep(philo);
-		printp(philo, " is thinking\n", 2);
 	}
 	return (NULL);
 }
@@ -53,7 +52,7 @@ void	runthread(t_philo *philo, int i)
 		x = -1;
 		while (++x < i)
 		{
-			if ((philo[x].timedie <= 0) || (i <= 1))
+			if ((philo[x].timedie >= philo->maxtime) || (i <= 1))
 			{
 				pthread_mutex_lock(philo->print);
 				printf(AC_RED "%zu ms philo %d die\n",
@@ -71,19 +70,22 @@ void	runthread(t_philo *philo, int i)
 }
 
 void	feedthread(t_philo *philo, char **argv,
-pthread_mutex_t *print, size_t kla)
+	pthread_mutex_t *print, size_t kla)
 {
 	int				i;
 	int				x;
-	pthread_t		th[ft_atoi(argv[1])];
+	pthread_t		*th;
 	pthread_mutex_t	pa;
 
-	x = -1;
 	i = ft_atoi(argv[1]);
+	th = malloc(sizeof(pthread_t) * i);
+	if (!th)
+		perror("Failed to allocate memory for thread array");
+	x = -1;
 	while (++x < i)
 	{
 		if (pthread_mutex_init(&pa, NULL))
-			perror("Failed to init thread");
+			perror("Failed to initialize mutex");
 		philo[x].th = th[x];
 		philo[x].id = x + 1;
 		philo[x].kla = kla;
@@ -91,7 +93,7 @@ pthread_mutex_t *print, size_t kla)
 		philo[x].right_f = &philo[(x + 1) % i].left_f;
 		philo[x].current_time = 0;
 		philo[x].maxtime = ft_atoi(argv[2]);
-		philo[x].timedie = philo[x].maxtime;
+		philo[x].timedie = 0;
 		philo[x].timesleep = ft_atoi(argv[4]);
 		philo[x].timeineat = ft_atoi(argv[3]);
 	}
