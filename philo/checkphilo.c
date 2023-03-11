@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 19:46:22 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 15:14:35 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 15:42:13 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,31 +72,30 @@ void	runthread(t_philo *philo, int i)
 void	feedthread(t_philo *philo, char **argv,
 	pthread_mutex_t *print, size_t kla)
 {
-	int				i;
-	int				x;
+	size_t			x;
 	pthread_t		*th;
 	pthread_mutex_t	pa;
 
-	i = ft_atoi(argv[1]);
-	th = malloc(sizeof(pthread_t) * i);
+	th = malloc(sizeof(pthread_t) * ft_atoi(argv[1]));
 	if (!th)
-		perror("Failed to allocate memory for thread array");
+		printf("Failed to allocate memory for thread array");
 	x = -1;
-	while (++x < i)
+	while (++x < (ft_atoi(argv[1])))
 	{
 		if (pthread_mutex_init(&pa, NULL))
-			perror("Failed to initialize mutex");
+			printf("Failed to initialize mutex");
 		philo[x].th = th[x];
 		philo[x].id = x + 1;
 		philo[x].kla = kla;
 		philo[x].print = print;
-		philo[x].right_f = &philo[(x + 1) % i].left_f;
+		philo[x].right_f = &philo[(x + 1) % ft_atoi(argv[1])].left_f;
 		philo[x].current_time = 0;
 		philo[x].maxtime = ft_atoi(argv[2]);
 		philo[x].timedie = 0;
 		philo[x].timesleep = ft_atoi(argv[4]);
 		philo[x].timeineat = ft_atoi(argv[3]);
 	}
+	free(th);
 }
 
 int	checkkla(t_philo *philo, int i)
@@ -111,4 +110,11 @@ int	checkkla(t_philo *philo, int i)
 		x--;
 	}
 	return (0);
+}
+
+void	destroy(t_philo *philo, int i)
+{
+	while (--i)
+		pthread_mutex_destroy(&philo[i].left_f);
+	free(philo);
 }

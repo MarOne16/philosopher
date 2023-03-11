@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:10:10 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 14:51:42 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 15:42:30 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <pthread.h>
 # include <stdlib.h>
 # include <stdio.h>
-# include <errno.h>
 # include <math.h>
 # include <sys/time.h>
 
@@ -48,6 +47,7 @@ typedef struct s_philo
 }						t_philo;
 
 void		*routin(void *arg);
+void		destroy(t_philo *philo, int i);
 int			checkarg(char **argv);
 void		runthread(t_philo *philo, int i);
 void		feedthread(t_philo *philo, char **argv,

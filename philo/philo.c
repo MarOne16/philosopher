@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:01:04 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 14:56:17 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 15:41:50 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,16 @@ int	main(int argc, char *argv[])
 		philo = malloc(sizeof(t_philo));
 		i = ft_atoi(argv[1]);
 		if (pthread_mutex_init(&print, 0x0))
-			perror("Failed to init thread");
+			printf("Failed to init thread");
 		while (++x < i)
 			if (pthread_mutex_init(&philo[x].left_f, 0x0))
-				perror("Failed to init thread");
+				printf("Failed to init thread");
 		if (argc == 6)
 			feedthread(philo, argv, &print, ft_atoi(argv[5]));
 		else
 			feedthread(philo, argv, &print, SIZE_MAX);
 		runthread(philo, i);
+		destroy(philo, i);
 	}
 	else
 		printf("Error\n");
