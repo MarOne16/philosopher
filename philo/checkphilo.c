@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 19:46:22 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 22:55:51 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/11 23:30:46 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*routin(void *arg)
 	size_t	t4;
 
 	philo = (t_philo *) arg;
-	while (1 && usleep(100) != -10)
+	while (1)
 	{
 		t3 = gettime_ms();
 		t1 = gettime_ms();
@@ -29,15 +29,16 @@ void	*routin(void *arg)
 		pthread_mutex_lock(philo->right_f);
 		t2 = gettime_ms();
 		t4 = gettime_ms();
+		pthread_mutex_lock(philo->print);
 		philo->timedie += ((t4 - t3));
 		philo->current_time += t2 - t1;
+		pthread_mutex_unlock(philo->print);
 		printp(philo, " taking a forks\n", 4);
 		ft_eat(philo);
 		pthread_mutex_unlock(philo->right_f);
 		pthread_mutex_unlock(&philo->left_f);
 		ft_sleep(philo);
 	}
-	return (NULL);
 }
 
 void	runthread(t_philo *philo, int i)
@@ -47,24 +48,24 @@ void	runthread(t_philo *philo, int i)
 	x = -1;
 	while (++x < i)
 		pthread_create(&philo[x].th, NULL, &routin, &philo[x]);
-	while (1 && usleep(50) != -10)
+	while (1)
 	{
 		x = -1;
 		while (++x < i)
 		{
+			pthread_mutex_lock(philo->print);
 			if ((philo[x].timedie >= philo->maxtime) || (i <= 1))
 			{
-				pthread_mutex_lock(philo->print);
 				printf(AC_RED "%zu ms philo %d died\n",
 					philo[x].current_time, philo[x].id);
 				return ;
 			}
 			else if (!checkkla(philo, i))
 			{
-				pthread_mutex_lock(philo->print);
 				printf(AC_GREEN"All philosophers ate their meals\n");
 				return ;
 			}
+			pthread_mutex_unlock(philo->print);
 		}
 	}
 }
