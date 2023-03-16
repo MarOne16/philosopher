@@ -6,91 +6,104 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:01:04 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 16:35:28 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/16 23:18:43 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-size_t	gettime_ms(void)
+void	*routine(void *arg)
 {
-	struct timeval		tp;
-	size_t				ms;
+	t_philo	*philo;
 
-	gettimeofday(&tp, NULL);
-	ms = tp.tv_sec * 1000;
-	ms += tp.tv_usec / 1000;
-	return (ms);
+	philo = (t_philo *)arg;
+	philo->timedie = gettime_ms();
+	while (lockphilo(philo->mainphilo))
+	{
+		ft_eat(philo);
+		ft_sleep(philo);
+	}
+	return (NULL);
 }
 
-void	ft_sleepms(size_t ms, t_philo *philo)
+void	die_check(t_philo *philo)
 {
-	size_t	curr;
-	size_t	end;
-	size_t	t1;
-	size_t	t2;
+	size_t	now;
 
-	curr = gettime_ms();
-	end = curr + ms;
-	while (gettime_ms() < end)
+	now = gettime_ms();
+	if ((philo->mainphilo->finish == 0 && (now - philo->timedie \
+		== philo->mainphilo->maxtime)) || philo->mainphilo[0].max_philo == 1)
 	{
-		t1 = gettime_ms();
-		usleep(100);
-		t2 = gettime_ms();
-		philo->timedie += ((t2 - t1));
+		philo->mainphilo->finish = 1;
+		pthread_mutex_lock(&philo->mainphilo->print);
+		printf(AC_RED"%zu %d %s \n", now - philo->mainphilo->start_time,
+			philo->id, "died");
+		pthread_mutex_unlock(&(philo->mainphilo->print));
 	}
 }
 
-void	ft_eat(t_philo *philo)
+void	*check_check(void *arg)
 {
-	size_t	t4;
-	size_t	t3;
+	t_philo		*philo;
 
-	t3 = gettime_ms();
-	philo->kla -= 1;
-	philo->timedie = 0;
-	printp(philo, " is eating\n", 3);
-	ft_sleepms(philo->timeineat, philo);
-	t4 = gettime_ms();
-	philo->current_time += t4 - t3;
+	philo = arg;
+	while (lockphilo(philo->mainphilo))
+	{
+		pthread_mutex_lock(&(philo->mainphilo->kill));
+		pthread_mutex_lock(&(philo->time));
+		die_check(philo);
+		if (checkeat(philo))
+		{
+			philo->mainphilo->finish = 1;
+			usleep(100);
+			pthread_mutex_lock(&(philo->mainphilo->print));
+			printf(AC_GREEN"All philosophers ate their meals\n");
+			pthread_mutex_unlock(&(philo->mainphilo->print));
+		}
+		pthread_mutex_unlock(&(philo->time));
+		pthread_mutex_unlock(&(philo->mainphilo->kill));
+	}
+	return (NULL);
 }
 
-void	ft_sleep(t_philo *philo)
+void	runthread(t_mainphilo *mainphilo)
 {
-	size_t	t4;
-	size_t	t3;
+	int			i;
+	pthread_t	monitor;
 
-	t3 = gettime_ms();
-	printp(philo, " is sleeping\n", 1);
-	ft_sleepms(philo->timesleep, philo);
-	t4 = gettime_ms();
-	philo->current_time += t4 - t3;
-	printp(philo, " is thinking\n", 2);
+	i = 0;
+	while (i < mainphilo->max_philo)
+	{
+		pthread_create(&(mainphilo->philo[i].th), NULL, &routine, \
+			&(mainphilo->philo[i]));
+		pthread_create(&monitor, NULL, &check_check, \
+			&(mainphilo->philo[i]));
+		pthread_detach(monitor);
+		i++;
+	}
+	i = 0;
+	while (i < mainphilo->max_philo)
+		pthread_join(mainphilo->philo[i++].th, NULL);
 }
 
 int	main(int argc, char *argv[])
 {
-	int				i;
-	int				x;
-	t_philo			*philo;
-	pthread_mutex_t	print;
+	t_mainphilo		philo;
 
 	if ((argc == 5 || argc == 6) && !checkarg(argv))
 	{
-		x = -1;
-		philo = malloc(sizeof(t_philo));
-		i = ft_atoi(argv[1]);
-		if (pthread_mutex_init(&print, 0x0))
-			printf("Failed to init thread");
-		while (++x < i)
-			if (pthread_mutex_init(&philo[x].left_f, 0x0))
-				printf("Failed to init thread");
-		if (argc == 6)
-			feedthread(philo, argv, &print, ft_atoi(argv[5]));
+		if (ft_atoi(argv[1]) == 1)
+		{
+			printf(AC_RED"0 philo 1 died\n");
+			return (0);
+		}
+		feedthread(&philo, argv);
+		if (argc == 5)
+			feedphilo(&philo, argv, SIZE_MAX);
 		else
-			feedthread(philo, argv, &print, SIZE_MAX);
-		runthread(philo, i);
-		destroy(philo, i);
+			feedphilo(&philo, argv, ft_atoi(argv[5]));
+		runthread(&philo);
+		clear_all(&philo);
 	}
 	else
 		printf(AC_BLACK"Error\n");

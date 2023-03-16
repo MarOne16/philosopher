@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parcingtools.c                                     :+:      :+:    :+:   */
+/*   parcing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/23 19:13:02 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/11 16:10:19 by mqaos            ###   ########.fr       */
+/*   Created: 2023/03/16 16:56:02 by mqaos             #+#    #+#             */
+/*   Updated: 2023/03/16 22:53:19 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"philo.h"
+#include "philo.h"
 
 size_t	ft_atoi(char *str)
 {
@@ -38,30 +38,13 @@ size_t	ft_atoi(char *str)
 	return (z * x);
 }
 
-void	printp(t_philo *philo, char *str, int x)
-{
-	pthread_mutex_lock(philo->print);
-	if (x == 1)
-		printf(AC_BLUE"%zu ms philo %d%s", philo->current_time, philo->id, str);
-	else if (x == 2)
-		printf(AC_YELLOW"%zu ms philo %d%s",
-			philo->current_time, philo->id, str);
-	else if (x == 3)
-		printf(AC_WHITE"%zu ms philo %d%s",
-			philo->current_time, philo->id, str);
-	else
-		printf(AC_MAGENTA"%zu ms philo %d%s",
-			philo->current_time, philo->id, str);
-	pthread_mutex_unlock(philo->print);
-}
-
 int	checkarg(char **argv)
 {
 	int	i;
 	int	x;
 
 	i = 0;
-	if (ft_atoi(argv[1]) <= 0)
+	if (ft_atoi(argv[1]) == 0)
 		return (1);
 	while (argv[++i])
 	{
@@ -75,4 +58,28 @@ int	checkarg(char **argv)
 		}
 	}
 	return (0);
+}
+
+void	clear_all(t_mainphilo *philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo->max_philo)
+	{
+		if (philo->philo[i].th)
+			pthread_detach(philo->philo[i].th);
+		pthread_mutex_destroy(&(philo->philo[i].time));
+		i++;
+	}
+	free(philo->philo);
+	i = 0;
+	while (i < philo->max_philo)
+	{
+		pthread_mutex_destroy(&(philo->forks[i]));
+		i++;
+	}
+	free(philo->forks);
+	pthread_mutex_destroy(&(philo->print));
+	pthread_mutex_destroy(&(philo->kill));
 }

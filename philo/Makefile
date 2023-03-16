@@ -4,16 +4,16 @@ GREEN = \033[1;32m
 DEFAULT = \033[0m
 NAME		=	philo
 CC			=	cc
-FLAGS		=	-Wall -Wextra -Werror -pthread
+FLAGS		=	-Wall -Wextra -Werror -pthread -fsanitize=thread
 RM			=	rm -rf
 HEADER		=	philo.h
-SOURCE		=	parcingtools.c philo.c checkphilo.c	
+SOURCE		=	parcing.c philo.c philotools.c philotools2.c
 OBJS		=	$(SOURCE:.c=.o)
 %.o: %.c
 				@${CC} ${FLAGS} -c $< -o $@
 
 $(NAME):		$(OBJS)
-				@$(CC) $(OBJS) -o $(NAME)
+				@$(CC) $(OBJS) -o $(NAME) -fsanitize=thread
 				@echo "$(GREEN)$(NAME) Created √$(DEFAULT)"
 
 all:			$(NAME)
@@ -24,7 +24,7 @@ clean:
 
 fclean:			clean
 				@$(RM) $(NAME)
-				@echo "$(RED)Files.o & Executable deleted X$(DEFAULT)"
+				@echo "$(RED)Files.o & Execumainphilo deleted X$(DEFAULT)"
 
 re:				fclean all
 
