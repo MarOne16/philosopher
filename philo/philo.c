@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:01:04 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/17 13:13:55 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/17 15:21:04 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ void	die_check(t_philo *philo)
 	{
 		philo->mainphilo->finish = 1;
 		pthread_mutex_lock(&philo->mainphilo->print);
-		printf(AC_RED"%lld %d %s \n", now - philo->mainphilo->current_time,
-			philo->id, "died");
+		printf(AC_RED"%lld ms philo %d died\n", \
+		now - philo->mainphilo->current_time,
+			philo->id);
 		pthread_mutex_unlock(&(philo->mainphilo->print));
 	}
 }
@@ -48,6 +49,7 @@ void	*check_check(void *arg)
 	philo = arg;
 	while (lockphilo(philo->mainphilo))
 	{
+		usleep(100);
 		pthread_mutex_lock(&(philo->mainphilo->kill));
 		pthread_mutex_lock(&(philo->time));
 		die_check(philo);
@@ -92,7 +94,7 @@ int	main(int argc, char *argv[])
 	{
 		if (ft_atoi(argv[1]) == 1)
 		{
-			printf(AC_RED"0 ms philo 1 died\n");
+			printf(AC_RED"0 ms 1 has taken a forks\n1 ms philo 1 died\n");
 			return (0);
 		}
 		feedthread(&philo, argv);
