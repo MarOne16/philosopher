@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 18:04:28 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/17 12:52:30 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/17 13:17:22 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_eat(t_philo *philo)
 	philo->timedie = gettime_ms();
 	pthread_mutex_unlock(&(philo->time));
 	pthread_mutex_lock(&(philo->mainphilo->kill));
-	philo->eat_count = philo->eat_count - 1;
+	philo->eat = philo->eat - 1;
 	pthread_mutex_unlock(&(philo->mainphilo->kill));
 	ft_sleepms(philo->mainphilo->timeeat);
 	pthread_mutex_unlock(&philo->mainphilo->forks[philo->right_f]);
@@ -43,16 +43,16 @@ int	checkeat(t_philo *philo)
 	x = -1;
 	while (++x < philo->mainphilo->max_philo)
 	{
-		if (philo[x].eat_count > 0)
+		if (philo[x].eat > 0)
 			return (0);
 	}
 	return (1);
 }
 
-size_t	gettime_ms(void)
+long long	gettime_ms(void)
 {
-	struct timeval		tp;
-	size_t				ms;
+	struct timeval			tp;
+	long long				ms;
 
 	gettimeofday(&tp, NULL);
 	ms = tp.tv_sec * 1000;
@@ -60,10 +60,10 @@ size_t	gettime_ms(void)
 	return (ms);
 }
 
-void	ft_sleepms(size_t ms)
+void	ft_sleepms(long long ms)
 {
-	size_t	curr;
-	size_t	end;
+	long long	curr;
+	long long	end;
 
 	curr = gettime_ms();
 	end = curr + ms;

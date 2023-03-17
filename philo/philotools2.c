@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 22:49:55 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/17 12:54:49 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/17 13:10:29 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,29 +27,29 @@ void	initmutex(t_mainphilo *philo, char **argv)
 
 void	printp(t_mainphilo *mainphilo, int id, char *msg, int x)
 {
-	size_t	now;
+	long long	now;
 
 	if (lockphilo(mainphilo))
 	{
 		pthread_mutex_lock(&(mainphilo->print));
 		now = gettime_ms();
 		if (x == 1)
-			printf(AC_MAGENTA"%zu ms %d %s\n", \
+			printf(AC_MAGENTA"%lld ms %d %s\n", \
 			now - mainphilo->current_time, id, msg);
 		else if (x == 2)
-			printf(AC_WHITE"%zu ms %d %s\n", \
+			printf(AC_WHITE"%lld ms %d %s\n", \
 			now - mainphilo->current_time, id, msg);
 		else if (x == 3)
-			printf(AC_BLUE"%zu ms %d %s\n", \
+			printf(AC_BLUE"%lld ms %d %s\n", \
 			now - mainphilo->current_time, id, msg);
 		else if (x == 4)
-			printf(AC_YELLOW"%zu ms %d %s\n", \
+			printf(AC_YELLOW"%lld ms %d %s\n", \
 			now - mainphilo->current_time, id, msg);
 		pthread_mutex_unlock(&(mainphilo->print));
 	}
 }
 
-void	feedphilo(t_mainphilo *mainphilo, char **argv, size_t eat)
+void	feedphilo(t_mainphilo *mainphilo, char **argv, long long eat)
 {
 	int	i;
 
@@ -60,11 +60,12 @@ void	feedphilo(t_mainphilo *mainphilo, char **argv, size_t eat)
 	while (++i < mainphilo->max_philo)
 	{
 		mainphilo->philo[i].mainphilo = mainphilo;
+		mainphilo->philo[i].th = NULL;
 		mainphilo->philo[i].id = i + 1;
 		mainphilo->philo[i].left_f = i;
 		mainphilo->philo[i].right_f = (i + 1) % ft_atoi(argv[1]);
-		mainphilo->philo[i].eat_count = eat;
-		mainphilo->philo[i].th = NULL;
+		mainphilo->philo[i].eat = eat;
+		mainphilo->philo[i].timedie = gettime_ms();
 		pthread_mutex_init(&(mainphilo->philo[i].time), NULL);
 	}
 	return ;

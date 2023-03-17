@@ -6,17 +6,17 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:56:02 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/17 13:02:11 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/17 13:10:09 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-size_t	ft_atoi(char *str)
+long long	ft_atoi(char *str)
 {
-	size_t	x;
-	size_t	z;
-	size_t	i;
+	long long	x;
+	long long	z;
+	long long	i;
 
 	x = 1;
 	z = 0;

@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:01:04 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/17 13:03:13 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/17 13:13:55 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	philo->timedie = gettime_ms();
 	while (lockphilo(philo->mainphilo))
 	{
 		ft_eat(philo);
@@ -28,7 +27,7 @@ void	*routine(void *arg)
 
 void	die_check(t_philo *philo)
 {
-	size_t	now;
+	long long	now;
 
 	now = gettime_ms();
 	if ((philo->mainphilo->finish == 0 && (now - philo->timedie \
@@ -36,7 +35,7 @@ void	die_check(t_philo *philo)
 	{
 		philo->mainphilo->finish = 1;
 		pthread_mutex_lock(&philo->mainphilo->print);
-		printf(AC_RED"%zu %d %s \n", now - philo->mainphilo->current_time,
+		printf(AC_RED"%lld %d %s \n", now - philo->mainphilo->current_time,
 			philo->id, "died");
 		pthread_mutex_unlock(&(philo->mainphilo->print));
 	}
@@ -98,7 +97,7 @@ int	main(int argc, char *argv[])
 		}
 		feedthread(&philo, argv);
 		if (argc == 5)
-			feedphilo(&philo, argv, SIZE_MAX);
+			feedphilo(&philo, argv, INT32_MAX);
 		else
 			feedphilo(&philo, argv, ft_atoi(argv[5]));
 		runthread(&philo);
