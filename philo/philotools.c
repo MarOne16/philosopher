@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 18:04:28 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/16 22:53:10 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/17 12:52:30 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	checkeat(t_philo *philo)
 		if (philo[x].eat_count > 0)
 			return (0);
 	}
-	philo->mainphilo->finish = 1;
 	return (1);
 }
 

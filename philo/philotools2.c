@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 22:49:55 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/16 23:19:04 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/17 12:54:49 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,17 @@ void	printp(t_mainphilo *mainphilo, int id, char *msg, int x)
 		pthread_mutex_lock(&(mainphilo->print));
 		now = gettime_ms();
 		if (x == 1)
-			printf(AC_MAGENTA"%zu %d %s\n", \
-			now - mainphilo->start_time, id, msg);
+			printf(AC_MAGENTA"%zu ms %d %s\n", \
+			now - mainphilo->current_time, id, msg);
 		else if (x == 2)
-			printf(AC_WHITE"%zu %d %s\n", now - mainphilo->start_time, id, msg);
+			printf(AC_WHITE"%zu ms %d %s\n", \
+			now - mainphilo->current_time, id, msg);
 		else if (x == 3)
-			printf(AC_BLUE"%zu %d %s\n", now - mainphilo->start_time, id, msg);
+			printf(AC_BLUE"%zu ms %d %s\n", \
+			now - mainphilo->current_time, id, msg);
 		else if (x == 4)
-			printf(AC_YELLOW"%zu %d %s\n", now - mainphilo->start_time, id, msg);
+			printf(AC_YELLOW"%zu ms %d %s\n", \
+			now - mainphilo->current_time, id, msg);
 		pthread_mutex_unlock(&(mainphilo->print));
 	}
 }
@@ -73,7 +76,7 @@ void	feedthread(t_mainphilo *mainphilo, char **argv)
 	mainphilo->maxtime = ft_atoi(argv[2]);
 	mainphilo->timeeat = ft_atoi(argv[3]);
 	mainphilo->timesleep = ft_atoi(argv[4]);
-	mainphilo->start_time = gettime_ms();
+	mainphilo->current_time = gettime_ms();
 	mainphilo->finish = 0;
 	initmutex(mainphilo, argv);
 }

@@ -6,7 +6,7 @@
 /*   By: mqaos <mqaos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 19:10:10 by mqaos             #+#    #+#             */
-/*   Updated: 2023/03/16 23:17:32 by mqaos            ###   ########.fr       */
+/*   Updated: 2023/03/17 13:01:51 by mqaos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct mainphilo
 	int				timeeat;
 	int				timesleep;
 	int				finish;
-	size_t			start_time;
+	size_t			current_time;
 	pthread_mutex_t	*forks;
 	struct s_philo	*philo;
 	pthread_mutex_t	kill;

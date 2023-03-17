@@ -4,16 +4,16 @@ GREEN = \033[1;32m
 DEFAULT = \033[0m
 NAME		=	philo
 CC			=	cc
-FLAGS		=	-Wall -Wextra -Werror -pthread -fsanitize=thread
+FLAGS		=	-Wall -Wextra -Werror 
 RM			=	rm -rf
 HEADER		=	philo.h
 SOURCE		=	parcing.c philo.c philotools.c philotools2.c
 OBJS		=	$(SOURCE:.c=.o)
-%.o: %.c
+%.o: %.c philo.h
 				@${CC} ${FLAGS} -c $< -o $@
 
 $(NAME):		$(OBJS)
-				@$(CC) $(OBJS) -o $(NAME) -fsanitize=thread
+				@$(CC) $(OBJS) -o $(NAME)
 				@echo "$(GREEN)$(NAME) Created √$(DEFAULT)"
 
 all:			$(NAME)
